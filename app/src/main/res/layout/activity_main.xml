@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <TimePicker
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/timePicker"
+        android:headerBackground="?attr/actionModeSplitBackground"
+        android:numbersSelectorColor="?attr/actionModeSplitBackground" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1">
+
+        <Button
+            android:text="Activer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/alarm_on"
+            android:layout_weight="0.50"
+            android:onClick="on" />
+
+        <Button
+            android:text="Desactiver"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".50"
+            android:id="@+id/alarm_off" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="Alarme non active"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/update_text"
+            android:layout_weight="0.33" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <CheckBox
+            android:text=""
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".14"
+            android:id="@+id/lundi" />
+        <CheckBox
+            android:text=""
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".14"
+            android:id="@+id/mardi" />
+        <CheckBox
+            android:text=""
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".14"
+            android:id="@+id/mercredi" />
+        <CheckBox
+            android:text=""
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".14"
+            android:id="@+id/jeudi" />
+        <CheckBox
+            android:text=""
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".14"
+            android:id="@+id/vendredi" />
+        <CheckBox
+            android:text=""
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".14"
+            android:id="@+id/samedi" />
+        <CheckBox
+            android:text=""
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".14"
+            android:id="@+id/dimanche" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:text="Lun"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.14" />
+        <TextView
+            android:text="Mar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.14" />
+        <TextView
+            android:text="Mer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.14" />
+        <TextView
+            android:text="Jeu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.14" />
+        <TextView
+            android:text="Ven"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.14" />
+        <TextView
+            android:text="Sam"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.14" />
+        <TextView
+            android:text="Dim"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.14" />
+
+        </LinearLayout>
+
+</LinearLayout>
+
