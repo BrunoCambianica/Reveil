@@ -55,24 +55,27 @@ public class MainActivity extends AppCompatActivity {
                 calendar.set(Calendar.MINUTE, alarm_timepicker.getMinute());
 
                 //recuperer les valeurs du timepicker
-                int hour = alarm_timepicker.getHour();
-                int minute = alarm_timepicker.getMinute();
+                final int hour = alarm_timepicker.getHour();
+                final int minute = alarm_timepicker.getMinute();
 
                 //convertir les valeurs en int
                 String hour_string = String.valueOf(hour);
                 String minute_string = String.valueOf(minute);
 
+                //afficher un 0devant les minutes inerieures à 10
                 if (minute < 10){
                     minute_string = "0" + String.valueOf(minute);
                 }
 
-                set_alarm_text("Alarme activée le  ? à " + hour_string + " : " + minute_string);
+                my_intent.putExtra("extra", "alarm_on");
 
                 //pending intent
                 pending_intent = PendingIntent.getBroadcast(MainActivity.this, 0, my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 //alarm manager
                 alarm_manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
+
+                set_alarm_text("Alarme activée à " + hour_string + " : " + minute_string);
             }
         });
 
@@ -81,13 +84,20 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 set_alarm_text("Alarme désactivée.");
 
+                //annuler
                 alarm_manager.cancel(pending_intent);
+
+                //indique que t'as appuyé sur desactiver
+                my_intent.putExtra("extra", "alarm_off");
+
+                //arreter
+                sendBroadcast(my_intent);
+
             }
         });
     }
     public void set_alarm_text(String output) {
         update_text.setText(output);
     }
-
 
 }
