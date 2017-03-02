@@ -45,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
         final Intent my_intent = new Intent(this.context, Alarm_Receiver.class);
 
 
+
+
+
+
         //onClick listener pour activer/desactiver les alarmes
         alarm_on.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         alarm_off.setOnClickListener(new View.OnClickListener() {
+            public Context context;
+
             @Override
             public void onClick(View v) {
 
@@ -93,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
 
                     //arreter
                     sendBroadcast(my_intent);
+                } else  {
+                    
                 }
 
                 set_alarm_text("Alarme désactivée.");

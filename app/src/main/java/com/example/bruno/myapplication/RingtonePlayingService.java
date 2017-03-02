@@ -37,27 +37,7 @@ public class RingtonePlayingService extends Service{
 
         Log.e("Ringtone state extra is", state);
 
-        //notifs
-        NotificationManager notify_manager =(NotificationManager)
-                getSystemService(NOTIFICATION_SERVICE);
 
-        //envoyer un intent dans le main
-        Intent intent_main_activity = new Intent(this.getApplicationContext(), MainActivity.class);
-
-        //pending intent pour la notif (obligatoire apparement wtf)
-        PendingIntent pending_intent_main_activity = PendingIntent.getActivity(this, 0, intent_main_activity, 0);
-
-        //Parametres des notifications
-        Notification notification_popup = new Notification.Builder(this)
-                .setContentTitle("Arreter l'alarme")
-                .setContentText("Click ici stp srx")
-                .setSmallIcon(R.drawable.notification_icon)
-                .setContentIntent(pending_intent_main_activity)
-                .setAutoCancel(true)
-                .build();
-
-        // set up notif
-        notify_manager.notify(0, notification_popup);
 
 
 
@@ -87,6 +67,28 @@ public class RingtonePlayingService extends Service{
 
             this.isRunning = true;
             this.startId = 0;
+
+            //notifs
+            NotificationManager notify_manager =(NotificationManager)
+                    getSystemService(NOTIFICATION_SERVICE);
+
+            //envoyer un intent dans le main
+            Intent intent_main_activity = new Intent(this.getApplicationContext(), MainActivity.class);
+
+            //pending intent pour la notif (obligatoire apparement wtf)
+            PendingIntent pending_intent_main_activity = PendingIntent.getActivity(this, 0, intent_main_activity, 0);
+
+            //Parametres des notifications
+            Notification notification_popup = new Notification.Builder(this)
+                    .setContentTitle("Arreter l'alarme")
+                    .setContentText("Click ici stp srx")
+                    .setSmallIcon(R.drawable.notification_icon)
+                    .setContentIntent(pending_intent_main_activity)
+                    .setAutoCancel(true)
+                    .build();
+
+            // set up notif
+            notify_manager.notify(0, notification_popup);
         }
         //musique arrêt
         else if (this.isRunning && startId == 0){
