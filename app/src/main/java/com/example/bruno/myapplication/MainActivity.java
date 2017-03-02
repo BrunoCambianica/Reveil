@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         Button alarm_on = (Button) findViewById(R.id.alarm_on);
         Button alarm_off = (Button) findViewById(R.id.alarm_off);
 
-        //creation de l'intent
+        //creation de l'intention
         final Intent my_intent = new Intent(this.context, Alarm_Receiver.class);
 
 
@@ -82,16 +82,22 @@ public class MainActivity extends AppCompatActivity {
         alarm_off.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                set_alarm_text("Alarme désactivée.");
+
 
                 //annuler
-                alarm_manager.cancel(pending_intent);
+                if (pending_intent != null){
+                    alarm_manager.cancel(pending_intent);
 
-                //indique que t'as appuyé sur desactiver
-                my_intent.putExtra("extra", "alarm_off");
+                    //indique que t'as appuyé sur desactiver
+                    my_intent.putExtra("extra", "alarm_off");
 
-                //arreter
-                sendBroadcast(my_intent);
+                    //arreter
+                    sendBroadcast(my_intent);
+                }
+
+                set_alarm_text("Alarme désactivée.");
+
+
 
             }
         });

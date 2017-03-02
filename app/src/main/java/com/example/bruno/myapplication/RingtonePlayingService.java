@@ -1,11 +1,15 @@
 package com.example.bruno.myapplication;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothClass;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationBuilderWithBuilderAccessor;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,6 +36,32 @@ public class RingtonePlayingService extends Service{
         String state = intent.getExtras().getString("extra");
 
         Log.e("Ringtone state extra is", state);
+
+        //notifs
+        NotificationManager notify_manager =(NotificationManager)
+                getSystemService(NOTIFICATION_SERVICE);
+
+        //envoyer un intent dans le main
+        Intent intent_main_activity = new Intent(this.getApplicationContext(), MainActivity.class);
+
+        //pending intent pour la notif (obligatoire apparement wtf)
+        PendingIntent pending_intent_main_activity = PendingIntent.getActivity(this, 0, intent_main_activity, 0);
+
+        //Parametres des notifications
+        Notification notification_popup = new Notification.Builder(this)
+                .setContentTitle("Arreter l'alarme")
+                .setContentText("Click ici stp srx")
+                .setSmallIcon(R.drawable.notification_icon)
+                .setContentIntent(pending_intent_main_activity)
+                .setAutoCancel(true)
+                .build();
+
+        // set up notif
+        notify_manager.notify(0, notification_popup);
+
+
+
+        //interpretation de l'intent
         assert state != null;
         switch (state) {
             case "alarm_on":
@@ -71,7 +101,6 @@ public class RingtonePlayingService extends Service{
         }
         // pas de musique mais appui sur desactiver
         else if (!this.isRunning && startId == 0){
-
             Log.e("musique off", "fin please");
 
             this.isRunning = false;
@@ -93,7 +122,10 @@ public class RingtonePlayingService extends Service{
 
     @Override
     public void onDestroy() {
-        // Tell the user we stopped.
-        Toast.makeText(this, "methode destroy", Toast.LENGTH_SHORT).show();
+        Log.e("destroy methode", "BOOM");
+
+        super.onDestroy();;
+        this.isRunning = false;
+
     }
 }
