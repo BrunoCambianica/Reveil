@@ -15,6 +15,10 @@ import android.support.v4.app.NotificationBuilderWithBuilderAccessor;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 /**
  * Created by Bruno on 28/02/2017.
  */
@@ -58,9 +62,6 @@ public class RingtonePlayingService extends Service{
                 .setContentIntent(pending_intent_main_activity)
                 .setAutoCancel(true)
                 .build();
-
-
-
 
 
         //interpretation de l'intent

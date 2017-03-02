@@ -55,47 +55,54 @@
         android:orientation="horizontal" >
 
         <CheckBox
-            android:text=""
+            android:text=" "
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".14"
-            android:id="@+id/lundi" />
+            android:buttonTint="@color/colorPrimaryDark"
+            android:id="@+id/monday" />
+        <CheckBox
+            android:text=" "
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".14"
+            android:buttonTint="@color/colorPrimaryDark"
+            android:id="@+id/tuesday" />
         <CheckBox
             android:text=""
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".14"
-            android:id="@+id/mardi" />
+            android:buttonTint="@color/colorPrimaryDark"
+            android:id="@+id/wednesday" />
         <CheckBox
             android:text=""
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".14"
-            android:id="@+id/mercredi" />
+            android:buttonTint="@color/colorPrimaryDark"
+            android:id="@+id/thursday" />
         <CheckBox
             android:text=""
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".14"
-            android:id="@+id/jeudi" />
+            android:buttonTint="@color/colorPrimaryDark"
+            android:id="@+id/friday" />
         <CheckBox
             android:text=""
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".14"
-            android:id="@+id/vendredi" />
+            android:buttonTint="@color/colorPrimaryDark"
+            android:id="@+id/saturday" />
         <CheckBox
             android:text=""
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".14"
-            android:id="@+id/samedi" />
-        <CheckBox
-            android:text=""
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".14"
-            android:id="@+id/dimanche" />
+            android:buttonTint="@color/colorPrimaryDark"
+            android:id="@+id/sunday" />
 
 
     </LinearLayout>

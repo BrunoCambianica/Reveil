@@ -10,8 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,12 +25,31 @@ public class MainActivity extends AppCompatActivity {
     TextView update_text;
     Context context;
     PendingIntent pending_intent;
+    String reference;
+    String days = "";
+
+    Boolean lundi;
+    Boolean mardi;
+    Boolean mercredi;
+    Boolean jeudi;
+    Boolean vendredi;
+    Boolean samedi;
+    Boolean dimanche;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.context = this;
+        // initialisation des jours demandés
+        final CheckBox monday = (CheckBox) findViewById(R.id.monday);
+        final CheckBox tuesday = (CheckBox) findViewById(R.id.tuesday);
+        final CheckBox wednesday = (CheckBox) findViewById(R.id.wednesday);
+        final CheckBox thursday = (CheckBox) findViewById(R.id.thursday);
+        final CheckBox friday = (CheckBox) findViewById(R.id.friday);
+        final CheckBox saturday = (CheckBox) findViewById(R.id.saturday);
+        final CheckBox sunday = (CheckBox) findViewById(R.id.sunday);
 
         //initialisation variables
         alarm_manager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -47,9 +71,56 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+            //    int days = Calendar.SUNDAY + (7 - calendar.get(Calendar.DAY_OF_WEEK)); REPETE CHAQUE SEMAINE?
                 //affecter les valeurs au timepicker
+                calendar.set(Calendar.HOUR, 24);
                 calendar.set(java.util.Calendar.HOUR_OF_DAY, alarm_timepicker.getHour());
                 calendar.set(java.util.Calendar.MINUTE, alarm_timepicker.getMinute());
+
+
+                //VERIFICATION JOUR COCHES
+                if (monday.isChecked()){
+                    reference += "2";
+                    if(!days.contains("lundi")){
+                        days += "lundi";
+                    }
+                }
+                if (tuesday.isChecked()){
+                    reference += "3";
+                    if(!days.contains(" mardi")) {
+                        days += " mardi";
+                    }
+                }
+                if (wednesday.isChecked()){
+                    reference += "4";
+                    if(!days.contains(" mercredi")) {
+                        days += " mercredi";
+                    }
+                }
+                if (thursday.isChecked()){
+                    reference += "5";
+                    if(!days.contains(" jeudi")) {
+                        days += " jeudi";
+                    }
+                }
+                if (friday.isChecked()){
+                    reference += "6";
+                    if(!days.contains(" vendredi")) {
+                        days += " vendredi";
+                    }
+                }
+                if (saturday.isChecked()){
+                    reference += "7";
+                    if(!days.contains(" samedi")) {
+                        days += " samedi";
+                    }
+                }
+                if (sunday.isChecked()){
+                    reference += "1";
+                    if(!days.contains(" dimanche")) {
+                        days += " dimanche";
+                    }
+                }
 
                 //recuperer les valeurs du timepicker
                 int hour = alarm_timepicker.getHour();
@@ -64,7 +135,12 @@ public class MainActivity extends AppCompatActivity {
                     minute_string = "0" + String.valueOf(minute);
                 }
 
-                set_alarm_text("Alarme activée à " + hour_string + " : " + minute_string);
+                if (days != "") {
+                    set_alarm_text("Alarme activée à " + hour_string + " : " + minute_string + " le " + days);
+                } else{
+                    set_alarm_text("Alarme activée à " + hour_string + " : " + minute_string);
+                }
+                days = "";
 
                 my_intent.putExtra("extra", "alarm_on");
 
@@ -76,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
                 alarm_manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                         pending_intent);
 
-
             }
         });
 
@@ -85,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
         alarm_off.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 set_alarm_text("Alarme désactivée.");
 
                 //text actualisé
@@ -102,5 +176,6 @@ public class MainActivity extends AppCompatActivity {
     private void set_alarm_text(String output) {
         update_text.setText(output);
     }
+
 
 }
