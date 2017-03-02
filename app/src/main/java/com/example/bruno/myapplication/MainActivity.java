@@ -1,15 +1,15 @@
 package com.example.bruno.myapplication;
 
+import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.icu.util.Calendar;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
 
     AlarmManager alarm_manager;
     TimePicker alarm_timepicker;
-    DatePicker alarm_datepicker;
     TextView update_text;
     Context context;
     PendingIntent pending_intent;
@@ -34,33 +33,27 @@ public class MainActivity extends AppCompatActivity {
         update_text = (TextView) findViewById(R.id.update_text);
 
         //instanciation calendrier
-        final Calendar calendar = Calendar.getInstance();
-
-
-        //initialisation des boutons
-        Button alarm_on = (Button) findViewById(R.id.alarm_on);
-        Button alarm_off = (Button) findViewById(R.id.alarm_off);
+        final java.util.Calendar calendar = java.util.Calendar.getInstance();
 
         //creation de l'intention
         final Intent my_intent = new Intent(this.context, Alarm_Receiver.class);
 
-
-
-
-
+        //initialisation des boutons
+        Button alarm_on = (Button) findViewById(R.id.alarm_on);
 
         //onClick listener pour activer/desactiver les alarmes
         alarm_on.setOnClickListener(new View.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
 
                 //affecter les valeurs au timepicker
-                calendar.set(Calendar.HOUR_OF_DAY, alarm_timepicker.getHour());
-                calendar.set(Calendar.MINUTE, alarm_timepicker.getMinute());
+                calendar.set(java.util.Calendar.HOUR_OF_DAY, alarm_timepicker.getHour());
+                calendar.set(java.util.Calendar.MINUTE, alarm_timepicker.getMinute());
 
                 //recuperer les valeurs du timepicker
-                final int hour = alarm_timepicker.getHour();
-                final int minute = alarm_timepicker.getMinute();
+                int hour = alarm_timepicker.getHour();
+                int minute = alarm_timepicker.getMinute();
 
                 //convertir les valeurs en int
                 String hour_string = String.valueOf(hour);
@@ -71,46 +64,42 @@ public class MainActivity extends AppCompatActivity {
                     minute_string = "0" + String.valueOf(minute);
                 }
 
+                set_alarm_text("Alarme activée à " + hour_string + " : " + minute_string);
+
                 my_intent.putExtra("extra", "alarm_on");
 
                 //pending intent
-                pending_intent = PendingIntent.getBroadcast(MainActivity.this, 0, my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                pending_intent = PendingIntent.getBroadcast(MainActivity.this, 0,
+                        my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 //alarm manager
-                alarm_manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
+                alarm_manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                        pending_intent);
 
-                set_alarm_text("Alarme activée à " + hour_string + " : " + minute_string);
+
             }
         });
 
-        alarm_off.setOnClickListener(new View.OnClickListener() {
-            public Context context;
+        Button alarm_off = (Button) findViewById(R.id.alarm_off);
 
+        alarm_off.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
-                //annuler
-                if (pending_intent != null){
-                    alarm_manager.cancel(pending_intent);
-
-                    //indique que t'as appuyé sur desactiver
-                    my_intent.putExtra("extra", "alarm_off");
-
-                    //arreter
-                    sendBroadcast(my_intent);
-                } else  {
-                    
-                }
-
                 set_alarm_text("Alarme désactivée.");
 
+                //text actualisé
+                alarm_manager.cancel(pending_intent);
 
+                //avertir de l'action bouton off
+                my_intent.putExtra("extra", "alarm_off");
 
+                // arreter la sonnerie
+                sendBroadcast(my_intent);
             }
         });
     }
-    public void set_alarm_text(String output) {
+    private void set_alarm_text(String output) {
         update_text.setText(output);
     }
 
