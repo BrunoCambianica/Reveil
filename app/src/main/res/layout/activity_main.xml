@@ -41,9 +41,8 @@
         <TextView
             android:text="Alarme non active"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/update_text"
-            android:layout_weight="0.33" />
+            android:layout_height="35dp"
+            android:id="@+id/update_text" />
 
     </LinearLayout>
 

@@ -67,12 +67,13 @@ public class RingtonePlayingService extends Service{
         //interpretation de l'intent
         assert state != null;
         switch (state) {
-            case "alarm_on":
+            case "alarm on":
+                Log.e("SWITCH CASE :", "ON");
                 startId = 1;
                 break;
-            case "alarm_off":
+            case "alarm off":
                 startId = 0;
-                Log.e("l'ID start : ", state);
+                Log.e("SWITCH CASE :", "off");
                 break;
             default:
                 startId = 0;

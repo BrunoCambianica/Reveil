@@ -44,7 +44,7 @@ public class Alarm_Receiver extends BroadcastReceiver {
         //fetch infoirmation
         String get_your_string = intent.getExtras().getString("extra");
 
-        Log.e("THE KEY? ", get_your_string);
+        Log.e("extra alarm receiver? ", get_your_string);
 
         //intent service musique
         Intent service_intent = new Intent(context, RingtonePlayingService.class);
