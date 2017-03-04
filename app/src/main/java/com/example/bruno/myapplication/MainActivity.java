@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     Integer minute;
     Integer hour;
     String days = "";
+    Calendar current = Calendar.getInstance();
 
 
     @Override
@@ -212,6 +213,28 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        Button delete = (Button) findViewById(R.id.delete);
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Integer compteur = 0;
+                Boolean checked = false;
+
+                Log.e("SUPPRESSION :", "Crash incomming");
+
+                // pire boucle au monde
+                while (compteur <= 7){
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, compteur, my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    Log.e("SUPPRESSION WHILE :", "" + pendingIntent + "");
+                    alarmManager.cancel(pendingIntent);
+
+                    compteur += 1;
+                }
+            }
+        });
     }
     private void set_alarm_text(String output) {
         update_text.setText(output);
@@ -240,6 +263,18 @@ public class MainActivity extends AppCompatActivity {
 
         //pending intent
         pending_intent = PendingIntent.getBroadcast(MainActivity.this, day, my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Long test1 = calendar.getTimeInMillis();
+        Long hhh = current.getTimeInMillis() - calendar.getTimeInMillis();
+        Log.e("Mon temps :", " "+ current.DAY_OF_WEEK);
+        Log.e("L'autre temps :", " "+ calendar.DAY_OF_WEEK);
+        Log.e("difference :", " "+ hhh);
+
+        if( hhh > 0 ){
+            Log.e("là on est dans le passé", ":(");
+
+        }
+
 
         //alarm manager
         alarm_manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),  /*24 * 7 * 60 * 60 * 1000 */ (100 * 1000) , pending_intent);
