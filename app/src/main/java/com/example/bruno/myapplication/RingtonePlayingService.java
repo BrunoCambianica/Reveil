@@ -5,19 +5,12 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.bluetooth.BluetoothClass;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationBuilderWithBuilderAccessor;
 import android.util.Log;
-import android.widget.Toast;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Created by Bruno on 28/02/2017.
@@ -54,9 +47,7 @@ public class RingtonePlayingService extends Service{
         //envoyer un intent dans le main
         Intent intent_main_activity = new Intent(this.getApplicationContext(), MainActivity.class);
 
-        //pending intent pour la notif (obligatoire apparement wtf)
-        //PendingIntent pending_intent_main_activity = PendingIntent.getActivity(this, 0, intent_main_activity, 0);
-
+        //récupération ID du pending intent
         PendingIntent pending_intent_MA = PendingIntent.getActivity(this, int_day, intent_main_activity, 0);
 
         //Parametres des notifications

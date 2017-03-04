@@ -14,10 +14,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.TimePicker;
-
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     Integer hour;
     String days = "";
     Calendar current = Calendar.getInstance();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +121,17 @@ public class MainActivity extends AppCompatActivity {
                     my_intent.putExtra("repeat", "off");
                     my_intent.putExtra("day", 0);
 
+                    // RESOLUTION TEST PASSE WHEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWW
+                    Long test_time = current.getTimeInMillis() - calendar.getTimeInMillis();
+                    Log.e("test avant ajout 24h", "" + test_time );
+                    if ( test_time > 0 ){
+                        Log.e("Là on est dans le passé", "non recurrent");
+                        Long milliseconds = calendar.getTimeInMillis();
+                        calendar.setTimeInMillis(milliseconds += 86400000); // ajout 24h en milliseconds
+                        Long test_time2 = current.getTimeInMillis() - calendar.getTimeInMillis();
+                        Log.e("test apres ajout 24h", "" + test_time2 );
+                    }
+
                     // pending intent
                     pending_intent = PendingIntent.getBroadcast(MainActivity.this, 0, my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -161,55 +168,11 @@ public class MainActivity extends AppCompatActivity {
                 //text actualisé
                 set_alarm_text("Alarme désactivée.");
 
-                //suppression de l'alarme
-                //alarm_manager.cancel(pending_intent);
-
                 //avertir de l'action bouton off
                 my_intent.putExtra("extra", "alarm off");
 
                 // arreter la sonnerie
                 sendBroadcast(my_intent);
-
-/*
-                String state = my_intent.getExtras().getString("repeat");
-                if (state != null) {
-                    switch (state) {
-                        case "on":
-                            Log.e("STATUT DE L'ALARME ", "REPEATED");
-                            //suppression de l'alarme
-                            set_alarm_text("Alarme reportée.");
-
-                            //on ne veut pas supprimer l'alarme
-                            //alarm_manager.cancel(pending_intent);
-
-                            //demander la réactivation de la sonnerie
-                            my_intent.putExtra("extra", "alarm on");
-                            //reactiver la sonnerie
-                            sendBroadcast(my_intent);
-                            break;
-                        case "off":
-                            Log.e("STATUT DE L'ALARME ", "NORMAL");
-                            //text actualisé
-                            set_alarm_text("Alarme désactivée.");
-
-                            //suppression de l'alarme
-                            alarm_manager.cancel(pending_intent);
-
-                            //avertir de l'action bouton off
-                            my_intent.putExtra("extra", "alarm off");
-
-                            // arreter la sonnerie
-                            sendBroadcast(my_intent);
-                            break;
-                        default:
-                            Log.e("DEFAULT", "ok");
-                            break;
-                    }
-                }
-
-
-
-*/
 
             }
         });
@@ -220,15 +183,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Integer compteur = 0;
-                Boolean checked = false;
-
-                Log.e("SUPPRESSION :", "Crash incomming");
+                Log.e("SUPPRESSION :", "jours 0-7");
 
                 // pire boucle au monde
                 while (compteur <= 7){
+
                     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, compteur, my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
                     Log.e("SUPPRESSION WHILE :", "" + pendingIntent + "");
+
                     alarmManager.cancel(pendingIntent);
 
                     compteur += 1;
@@ -264,21 +229,24 @@ public class MainActivity extends AppCompatActivity {
         //pending intent
         pending_intent = PendingIntent.getBroadcast(MainActivity.this, day, my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Long test1 = calendar.getTimeInMillis();
-        Long hhh = current.getTimeInMillis() - calendar.getTimeInMillis();
-        Log.e("Mon temps :", " "+ current.DAY_OF_WEEK);
-        Log.e("L'autre temps :", " "+ calendar.DAY_OF_WEEK);
-        Log.e("difference :", " "+ hhh);
+        // test bugg lancement passé alarme
+        Long test_time = current.getTimeInMillis() - calendar.getTimeInMillis();
 
-        if( hhh > 0 ){
-            Log.e("là on est dans le passé", ":(");
+        int millis_in_a_week = 604800000;
 
+        Long current_millis = calendar.getTimeInMillis();
+
+        if( test_time > 0 ){
+            Log.e("là on est dans le passé", ": récurrent");
+
+            calendar.setTimeInMillis(current_millis += 604800000);
+
+            Long test_time2 = current.getTimeInMillis() - calendar.getTimeInMillis();
+            Log.e("après ajout semaine", "" + test_time2);
         }
-
 
         //alarm manager
         alarm_manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),  /*24 * 7 * 60 * 60 * 1000 */ (100 * 1000) , pending_intent);
     }
-
 
 }
