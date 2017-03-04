@@ -40,8 +40,12 @@ public class RingtonePlayingService extends Service{
 
         //fetch la valeur de l'info
         String state = intent.getExtras().getString("extra");
+        //fetch le jour
+        Integer int_day = intent.getExtras().getInt("day");
 
-        Log.e("Ringtone extra is ", state);
+        Log.e("RPS extra ", state);
+        Log.e("RPS jour : ", "" + int_day + "");
+
 
         //notifs
         NotificationManager notify_manager = (NotificationManager)
@@ -51,15 +55,16 @@ public class RingtonePlayingService extends Service{
         Intent intent_main_activity = new Intent(this.getApplicationContext(), MainActivity.class);
 
         //pending intent pour la notif (obligatoire apparement wtf)
-        PendingIntent pending_intent_main_activity = PendingIntent.getActivity(this, 0,
-                intent_main_activity, 0);
+        //PendingIntent pending_intent_main_activity = PendingIntent.getActivity(this, 0, intent_main_activity, 0);
+
+        PendingIntent pending_intent_MA = PendingIntent.getActivity(this, int_day, intent_main_activity, 0);
 
         //Parametres des notifications
         Notification notification_popup = new Notification.Builder(this)
                 .setContentTitle("An alarm is going off!")
                 .setContentText("Click me!")
                 .setSmallIcon(R.drawable.notification_icon)
-                .setContentIntent(pending_intent_main_activity)
+                .setContentIntent(pending_intent_MA)
                 .setAutoCancel(true)
                 .build();
 
@@ -68,12 +73,12 @@ public class RingtonePlayingService extends Service{
         assert state != null;
         switch (state) {
             case "alarm on":
-                Log.e("SWITCH CASE :", "ON");
+                //Log.e("SWITCH CASE :", "ON");
                 startId = 1;
                 break;
             case "alarm off":
                 startId = 0;
-                Log.e("SWITCH CASE :", "off");
+                //Log.e("SWITCH CASE :", "off");
                 break;
             default:
                 startId = 0;
@@ -84,7 +89,7 @@ public class RingtonePlayingService extends Service{
         //musique commence
         if (!this.isRunning && startId == 1) {
 
-            Log.e("musique off", "debut please");
+            //Log.e("musique off", "debut please");
 
             this.isRunning = true;
             this.startId = 0;
@@ -98,7 +103,7 @@ public class RingtonePlayingService extends Service{
         //musique arrêt
         else if (this.isRunning && startId == 0) {
 
-            Log.e("musique on", "fin please");
+            //Log.e("musique on", "fin please");
             //arret musique
             media_song.stop();
             media_song.reset();
@@ -108,7 +113,7 @@ public class RingtonePlayingService extends Service{
         }
         // pas de musique mais appui sur desactiver
         else if (!this.isRunning && startId == 0){
-            Log.e("musique off", "fin please");
+            //Log.e("musique off", "fin please");
 
             this.isRunning = false;
             this.startId = 0;
@@ -116,14 +121,14 @@ public class RingtonePlayingService extends Service{
         // musique mais appui sur activer
         else if (this.isRunning && startId == 1){
 
-            Log.e("musique on", "debut please");
+            //Log.e("musique on", "debut please");
             this.isRunning = true;
             this.startId = 1;
         }
         //au cas ou!
         else{
 
-            Log.e("y'a rien à voir !", " ");
+            //Log.e("y'a rien à voir !", " ");
         }
         return START_NOT_STICKY;
     }
