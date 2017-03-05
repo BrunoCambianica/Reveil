@@ -19,8 +19,8 @@ public class Alarm_Receiver extends BroadcastReceiver {
         String get_your_string = intent.getExtras().getString("extra");
         Integer get_day = intent.getExtras().getInt("day");
 
-        Log.e("AR jour :  ", "" + get_day + "");
-        Log.e("AR etat : ", get_your_string);
+        //Log.e("AR jour :  ", "" + get_day + "");
+        //Log.e("AR etat : ", get_your_string);
 
         //intent service musique
         Intent service_intent = new Intent(context, RingtonePlayingService.class);

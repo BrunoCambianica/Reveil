@@ -36,8 +36,8 @@ public class RingtonePlayingService extends Service{
         //fetch le jour
         Integer int_day = intent.getExtras().getInt("day");
 
-        Log.e("RPS extra ", state);
-        Log.e("RPS jour : ", "" + int_day + "");
+        //Log.e("RPS extra ", state);
+        //Log.e("RPS jour : ", "" + int_day + "");
 
 
         //notifs
@@ -52,8 +52,8 @@ public class RingtonePlayingService extends Service{
 
         //Parametres des notifications
         Notification notification_popup = new Notification.Builder(this)
-                .setContentTitle("An alarm is going off!")
-                .setContentText("Click me!")
+                .setContentTitle("L'alarme sonne !")
+                .setContentText("Clique ici !")
                 .setSmallIcon(R.drawable.notification_icon)
                 .setContentIntent(pending_intent_MA)
                 .setAutoCancel(true)
