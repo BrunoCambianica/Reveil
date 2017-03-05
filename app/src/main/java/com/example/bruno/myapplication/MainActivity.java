@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     alarmToPerform(1);
                 }
                 if (days == "") {
-                    Log.e("alarme non répétée :", "day 0");
+                    //Log.e("alarme non répétée :", "day 0");
                     // info extra
                     my_intent.putExtra("extra", "alarm on");
                     my_intent.putExtra("repeat", "off");
@@ -123,13 +123,13 @@ public class MainActivity extends AppCompatActivity {
 
                     // RESOLUTION TEST PASSE WHEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWW
                     Long test_time = current.getTimeInMillis() - calendar.getTimeInMillis();
-                    Log.e("test avant ajout 24h", "" + test_time );
+                    //Log.e("test avant ajout 24h", "" + test_time );
                     if ( test_time > 0 ){
-                        Log.e("Là on est dans le passé", "non recurrent");
+                        //Log.e("Là on est dans le passé", "non recurrent");
                         Long milliseconds = calendar.getTimeInMillis();
                         calendar.setTimeInMillis(milliseconds += 86400000); // ajout 24h en milliseconds
                         Long test_time2 = current.getTimeInMillis() - calendar.getTimeInMillis();
-                        Log.e("test apres ajout 24h", "" + test_time2 );
+                        //Log.e("test apres ajout 24h", "" + test_time2 );
                     }
 
                     // pending intent
@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
                     set_alarm_text("Alarme activée à " + hour_string + " : " + minute_string);
                 }
                 days = "";
+
             }
         });
 
@@ -165,7 +166,9 @@ public class MainActivity extends AppCompatActivity {
         alarm_off.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //text actualisé
+
+
+                // update etat alarme
                 set_alarm_text("Alarme désactivée.");
 
                 //avertir de l'action bouton off
@@ -183,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Integer compteur = 0;
-                Log.e("SUPPRESSION :", "jours 0-7");
+                //Log.e("SUPPRESSION :", "jours 0-7");
 
                 // pire boucle au monde
                 while (compteur <= 7){
@@ -192,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, compteur, my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    Log.e("SUPPRESSION WHILE :", "" + pendingIntent + "");
+                    //Log.e("SUPPRESSION WHILE :", "" + pendingIntent + "");
 
                     alarmManager.cancel(pendingIntent);
 
@@ -222,9 +225,8 @@ public class MainActivity extends AppCompatActivity {
         my_intent.putExtra("extra", "alarm on");
         my_intent.putExtra("repeat", "on");
         my_intent.putExtra("day", day);
-        Log.e("jour : ", "" + day + "");
-        String test = my_intent.getExtras().getString("extra");
-        Log.e("extra creation", test);
+        //Log.e("jour : ", "" + day + "");
+        //Log.e("extra creation", test);
 
         //pending intent
         pending_intent = PendingIntent.getBroadcast(MainActivity.this, day, my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -232,21 +234,19 @@ public class MainActivity extends AppCompatActivity {
         // test bugg lancement passé alarme
         Long test_time = current.getTimeInMillis() - calendar.getTimeInMillis();
 
-        int millis_in_a_week = 604800000;
-
         Long current_millis = calendar.getTimeInMillis();
 
         if( test_time > 0 ){
-            Log.e("là on est dans le passé", ": récurrent");
+            //Log.e("là on est dans le passé", ": récurrent");
 
             calendar.setTimeInMillis(current_millis += 604800000);
 
-            Long test_time2 = current.getTimeInMillis() - calendar.getTimeInMillis();
-            Log.e("après ajout semaine", "" + test_time2);
+            //Long test_time2 = current.getTimeInMillis() - calendar.getTimeInMillis();
+            //Log.e("après ajout semaine", "" + test_time2);
         }
 
         //alarm manager
-        alarm_manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),  /*24 * 7 * 60 * 60 * 1000 */ (100 * 1000) , pending_intent);
+        alarm_manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),  24 * 7 * 60 * 60 * 1000 /* (10 * 1000)*/ , pending_intent);
     }
 
 }
