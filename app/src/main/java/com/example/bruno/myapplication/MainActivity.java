@@ -3,9 +3,13 @@ package com.example.bruno.myapplication;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +18,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +35,37 @@ public class MainActivity extends AppCompatActivity {
     String days = "";
     Calendar current = Calendar.getInstance();
 
+    private List<Song> songs = new ArrayList<Song>();
+
+    private List<Image> images = new ArrayList<Image>();
+
+    private void updateSongs() {
+        ContentResolver contentResolver = getContentResolver();
+        Uri uri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Cursor cursor = contentResolver.query(uri, null, null, null, null);
+        if (cursor == null) {
+            // query failed, handle error.
+        } else if (!cursor.moveToFirst()) {
+            // no media on the device
+        } else {
+
+            int titleColumn = cursor.getColumnIndex(android.provider.MediaStore.Audio.Media.TITLE);
+            int idColumn = cursor.getColumnIndex(android.provider.MediaStore.Audio.Media._ID);
+            int path=  cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
+
+            do {
+                //long thisId = cursor.getLong(idColumn);
+                String thisTitle = cursor.getString(titleColumn);
+                String thispath = cursor.getString(path);
+                Log.v("var:", thisTitle);
+                Log.v("path", thispath);
+                Song that = new Song();
+                that.addSong(thispath, thisTitle);
+                songs.add(that);
+
+            } while (cursor.moveToNext());
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
                 calendar.set(Calendar.HOUR, 24);
                 calendar.set(java.util.Calendar.HOUR_OF_DAY, alarm_timepicker.getHour());
                 calendar.set(java.util.Calendar.MINUTE, alarm_timepicker.getMinute());
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
 
                 //recuperer les valeurs du timepicker
                 hour = alarm_timepicker.getHour();
@@ -115,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                     alarmToPerform(1);
                 }
                 if (days == "") {
-                    //Log.e("alarme non répétée :", "day 0");
+                    Log.e("alarme non répétée :", "day 0");
                     // info extra
                     my_intent.putExtra("extra", "alarm on");
                     my_intent.putExtra("repeat", "off");
@@ -123,14 +163,18 @@ public class MainActivity extends AppCompatActivity {
 
                     // RESOLUTION TEST PASSE WHEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWW
                     Long test_time = current.getTimeInMillis() - calendar.getTimeInMillis();
-                    //Log.e("test avant ajout 24h", "" + test_time );
+                    Log.e("test avant ajout 24h", "" + test_time );
+
                     if ( test_time > 0 ){
-                        //Log.e("Là on est dans le passé", "non recurrent");
+
+                        Log.e("Là on est dans le passé", "non recurrent");
+
                         Long milliseconds = calendar.getTimeInMillis();
                         calendar.setTimeInMillis(milliseconds += 86400000); // ajout 24h en milliseconds
                         Long test_time2 = current.getTimeInMillis() - calendar.getTimeInMillis();
-                        //Log.e("test apres ajout 24h", "" + test_time2 );
+                        Log.e("test apres ajout 24h", "" + test_time2 );
                     }
+
 
                     // pending intent
                     pending_intent = PendingIntent.getBroadcast(MainActivity.this, 0, my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -186,16 +230,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Integer compteur = 0;
-                //Log.e("SUPPRESSION :", "jours 0-7");
+                Log.e("SUPPRESSION :", "jours 0-7");
+
 
                 // pire boucle au monde
+
                 while (compteur <= 7){
 
                     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, compteur, my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    //Log.e("SUPPRESSION WHILE :", "" + pendingIntent + "");
+                    Log.e("SUPPRESSION WHILE :", "" + pendingIntent + "");
 
                     alarmManager.cancel(pendingIntent);
 
@@ -225,8 +271,7 @@ public class MainActivity extends AppCompatActivity {
         my_intent.putExtra("extra", "alarm on");
         my_intent.putExtra("repeat", "on");
         my_intent.putExtra("day", day);
-        //Log.e("jour : ", "" + day + "");
-        //Log.e("extra creation", test);
+        Log.e("jour : ", "" + day + "");
 
         //pending intent
         pending_intent = PendingIntent.getBroadcast(MainActivity.this, day, my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -237,12 +282,12 @@ public class MainActivity extends AppCompatActivity {
         Long current_millis = calendar.getTimeInMillis();
 
         if( test_time > 0 ){
-            //Log.e("là on est dans le passé", ": récurrent");
+            Log.e("là on est dans le passé", ": récurrent");
 
             calendar.setTimeInMillis(current_millis += 604800000);
 
-            //Long test_time2 = current.getTimeInMillis() - calendar.getTimeInMillis();
-            //Log.e("après ajout semaine", "" + test_time2);
+            Long test_time2 = current.getTimeInMillis() - calendar.getTimeInMillis();
+            Log.e("après ajout semaine", "" + test_time2);
         }
 
         //alarm manager
